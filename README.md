@@ -6,6 +6,8 @@ A logbook for slow crafts. Each loaf of sourdough and each carved spoon gets its
 
 ## Status
 
+**Focus: parked.** Not one of the featured prototypes for now. The featured three are 001, 002 and 004.
+
 Working prototype, built as a single-file web app (`index.html`). It was originally published as a Claude artifact.
 
 ## 1. Problem statement
