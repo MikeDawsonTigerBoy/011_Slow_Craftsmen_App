@@ -1,0 +1,467 @@
+<title>Slow Craftsman</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one-column workshop bench — wordmark header, single working panel, fixed tool-rack nav at the bottom split into Bread and Spoon */
+:root{
+  --bg:#E8EBE3; --surface:#F6F7F2; --sunk:#DFE3D9; --ink:#1D231E; --muted:#5C665D; --line:#C9CFC3;
+  --crust:#7A4A22; --crust-soft:#EFE2D3; --sap:#3D6550; --sap-soft:#DCE8DF;
+  --ok:#2F7A4E; --warn:#A66A12; --bad:#B03A2C;
+  --f-display:"Gloock","Iowan Old Style",Georgia,serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#131714; --surface:#1B201C; --sunk:#232A24; --ink:#E3E7DE; --muted:#9AA498; --line:#2F3730;
+  --crust:#D59C64; --crust-soft:#3A2B1E; --sap:#8FB89C; --sap-soft:#203027;
+  --ok:#6CC08C; --warn:#E0A54A; --bad:#EB7A6B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131714; --surface:#1B201C; --sunk:#232A24; --ink:#E3E7DE; --muted:#9AA498; --line:#2F3730;
+  --crust:#D59C64; --crust-soft:#3A2B1E; --sap:#8FB89C; --sap-soft:#203027;
+  --ok:#6CC08C; --warn:#E0A54A; --bad:#EB7A6B; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 calc(84px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:640px;margin:0 auto}
+header.top{padding-block:22px 10px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.mark{font-family:var(--f-display);font-size:30px;line-height:1;letter-spacing:-.01em;margin:0}
+.mark span{color:var(--crust)}
+.sub{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.sync{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+h2{font-family:var(--f-display);font-weight:400;font-size:24px;margin:0;text-wrap:balance;line-height:1.15}
+h3{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:600}
+p{margin:0}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+button,.btn{font:inherit;font-weight:600;font-size:15px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:10px 14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;justify-content:center;text-decoration:none}
+button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--crust);outline-offset:2px}
+.primary{background:var(--crust);border-color:var(--crust);color:var(--surface)}
+.sap{background:var(--sap);border-color:var(--sap);color:var(--surface)}
+.ghost{background:transparent}
+.link{background:none;border:none;padding:4px 0;color:var(--muted);font-weight:500;text-decoration:underline;text-underline-offset:3px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.pill{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--sap-soft);color:var(--ok)}.p-warn{background:var(--crust-soft);color:var(--warn)}.p-bad{background:var(--crust-soft);color:var(--bad)}.p-mute{background:var(--sunk);color:var(--muted)}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--muted);min-width:0;flex:1}
+input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
+input[type=range]{padding:0;accent-color:var(--crust);background:transparent;border:none}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:8px 0;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.r,th.r{text-align:right}
+tr.total td{font-weight:700;border-bottom:none}
+.slider{display:flex;flex-direction:column;gap:4px}
+.slider .row{justify-content:space-between}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.stepper button{border:none;border-radius:0;padding:8px 14px}
+.stepper output{min-width:36px;text-align:center;font-family:var(--f-mono);font-size:17px}
+/* timeline */
+.tl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.tl li{display:grid;grid-template-columns:62px 18px minmax(0,1fr);gap:0 10px;position:relative}
+.tl .t{font-family:var(--f-mono);font-size:13px;color:var(--muted);padding-top:2px;text-align:right}
+.tl .dot{position:relative}
+.tl .dot::before{content:"";position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--line)}
+.tl li:last-child .dot::before{bottom:auto;height:10px}
+.tl .dot i{position:absolute;left:3px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--line)}
+.tl li.done .dot i{background:var(--sap);border-color:var(--sap)}
+.tl li.now .dot i{background:var(--crust);border-color:var(--crust);box-shadow:0 0 0 4px var(--crust-soft)}
+.tl .body{padding-bottom:18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tl li.done .body .ttl{color:var(--muted)}
+.ttl{font-weight:700}
+.cam{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--crust)}
+.nowbox{background:var(--crust-soft);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.count{font-family:var(--f-mono);font-size:22px;font-variant-numeric:tabular-nums}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.thumbs figure{margin:0;display:flex;flex-direction:column;gap:3px}
+.thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;background:var(--sunk);display:block}
+.thumbs figcaption{font-size:11px;color:var(--muted);line-height:1.3}
+.mini{width:64px;height:64px;object-fit:cover;border-radius:6px;background:var(--sunk);flex:none}
+.card{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;font-weight:400}
+.card .grow{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ph{width:64px;height:64px;border-radius:6px;background:var(--sunk);display:grid;place-items:center;color:var(--muted);flex:none}
+.list{display:flex;flex-direction:column;gap:8px}
+.tool{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.tool:last-child{border-bottom:none}
+.empty{border:1.5px dashed var(--line);border-radius:var(--r);padding:22px 16px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;color:var(--muted)}
+.stages{display:flex;gap:0;overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+.stages button{flex:1 0 auto;border:none;border-right:1px solid var(--line);border-radius:0;font-size:13px;padding:9px 10px;background:transparent}
+.stages button:last-child{border-right:none}
+.stages button.past{color:var(--sap)}
+.stages button[aria-pressed="true"]{background:var(--sap);color:var(--surface)}
+.note{font-size:14px;background:var(--sunk);border-radius:8px;padding:10px 12px}
+details summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+nav.rack{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:20;
+  padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px));padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.rack .in{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr) 1px repeat(2,1fr)}
+nav.rack .sep{background:var(--line);margin:12px 0}
+nav.rack button{border:none;background:none;flex-direction:column;gap:2px;padding:9px 2px 10px;font-size:11px;font-weight:600;color:var(--muted);border-radius:0}
+nav.rack button svg{width:22px;height:22px}
+nav.rack button[aria-current="page"]{color:var(--crust)}
+nav.rack button.sp[aria-current="page"]{color:var(--sap)}
+.ws{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-align:center;grid-column:span 3}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:8px;font-size:14px;font-weight:600;z-index:30;max-width:90vw}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion:no-preference){.nowbox{animation:rise .3s ease-out}@keyframes rise{from{transform:translateY(4px)}to{transform:none}}}
+@media (max-width:420px){.grid3{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.mark{font-size:26px}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div><h1 class="mark">Slow <span>Craftsman</span></h1><div class="sub">Bread &amp; spoon workshop</div></div>
+    <div class="sync" id="sync">Saved on this device</div>
+  </header>
+  <main id="app" class="stack"></main>
+</div>
+<input type="file" accept="image/*" capture="environment" id="photoIn" class="vh" aria-label="Photo">
+<nav class="rack" aria-label="Workshop">
+  <div class="in" id="nav"></div>
+</nav>
+
+<script>
+(()=>{
+"use strict";
+/* ---------- reference data ---------- */
+const RECIPES=[
+ {id:"country",name:"Country sourdough",blurb:"Everyday open-crumb boule. Forgiving and well balanced.",flours:[["Bread flour (white)",90],["Whole wheat",10]],hyd:75,hmin:68,hmax:82,lev:20,salt:2,extras:[],loaf:900,
+  steps:["levain","autolyse","mix","folds4","bulk","preshape","shape","retard","preheat","bake","cool"]},
+ {id:"open",name:"High-hydration open crumb",blurb:"Wetter dough for big irregular holes. Needs a strong starter.",flours:[["Bread flour (white)",85],["Whole wheat",10],["Rye",5]],hyd:80,hmin:76,hmax:88,lev:15,salt:2.2,extras:[],loaf:900,
+  steps:["levain","autolyse","mix","coil","bulk","preshape","shape","retard","preheat","bake","cool"]},
+ {id:"wholewheat",name:"Whole wheat",blurb:"Nutty and dense. Bran drinks water, so hydration runs high.",flours:[["Whole wheat",60],["Bread flour (white)",40]],hyd:82,hmin:76,hmax:90,lev:20,salt:2,extras:[],loaf:950,
+  steps:["levain","autolyse","mix","folds3","bulk","preshape","shape","retard","preheat","bake","cool"]},
+ {id:"rye",name:"70% rye tin loaf",blurb:"Paste-like dough, no folding. Proofed and baked in a tin.",flours:[["Rye (medium)",70],["Bread flour (white)",30]],hyd:85,hmin:80,hmax:95,lev:30,salt:2,extras:[["Seeds (optional)",10]],loaf:1000,
+  steps:["levain","ryemix","ryebulk","rytin","ryeproof","preheat200","ryebake","ryerest"]},
+ {id:"focaccia",name:"Sourdough focaccia",blurb:"Very wet, olive-oil rich, baked in a tray.",flours:[["Bread flour (white)",100]],hyd:85,hmin:75,hmax:95,lev:20,salt:2.4,extras:[["Olive oil",6]],loaf:1000,
+  steps:["levain","mix","folds4","bulk","tray","fproof","dimple","fbake","cool"]},
+ {id:"sandwich",name:"Sandwich tin loaf",blurb:"Soft, enriched crumb for toast and sandwiches.",flours:[["Bread flour (white)",100]],hyd:66,hmin:60,hmax:72,lev:20,salt:2,extras:[["Butter (soft)",8],["Honey",4]],loaf:900,
+  steps:["levain","mix","folds3","bulk","shapetin","tinproof","preheat200","sbake","cool"]}
+];
+const STEPS={
+ levain:{t:"Build the levain",d:"Mix starter, flour and water. Wait until it has doubled and domed.",m:300,cam:"Levain at peak"},
+ autolyse:{t:"Autolyse",d:"Mix the flour with most of the water. Leave covered.",m:45},
+ mix:{t:"Mix in levain and salt",d:"Add the levain, salt and held-back water. Squeeze through until smooth.",m:30,cam:"Dough after mixing"},
+ folds4:{t:"Stretch and folds",d:"4 sets, one every 30 minutes. Wet hands, four folds per set.",m:120},
+ folds3:{t:"Stretch and folds",d:"3 sets, one every 30 minutes.",m:90},
+ coil:{t:"Coil folds",d:"4 sets of coil folds, 30–40 minutes apart. Be gentle.",m:150},
+ bulk:{t:"Bulk ferment",d:"Leave until risen 50–75%, domed, with bubbles on the sides.",m:150,cam:"End of bulk"},
+ preshape:{t:"Pre-shape",d:"Tip out, divide by weight, round lightly. Bench rest.",m:25},
+ shape:{t:"Final shape",d:"Shape tight, seam up into a floured banneton.",m:10,cam:"Shaped loaf"},
+ retard:{t:"Cold retard",d:"Cover and refrigerate overnight (12–16 h).",m:780},
+ preheat:{t:"Preheat oven and pot",d:"250 °C with the Dutch oven inside.",m:45},
+ bake:{t:"Score and bake",d:"Lid on 20 min at 250 °C, lid off 20–25 min at 230 °C.",m:45,cam:"Fresh out of the oven"},
+ cool:{t:"Cool, then cut",d:"Rest on a rack at least 1 hour before slicing.",m:60,cam:"Crumb shot"},
+ ryemix:{t:"Mix the rye paste",d:"Combine everything with a spatula. It should look like thick porridge.",m:15,cam:"Rye paste"},
+ ryebulk:{t:"Bulk rest",d:"Covered, until cracks start to show on the surface.",m:90},
+ rytin:{t:"Fill the tin",d:"Wet hands, smooth into a greased tin. Dust with rye.",m:5},
+ ryeproof:{t:"Proof in the tin",d:"Until risen about a third and the top is cracked.",m:150,cam:"Proofed tin"},
+ preheat200:{t:"Preheat oven",d:"Preheat to 230 °C for rye or 200 °C for the sandwich loaf.",m:30},
+ ryebake:{t:"Bake",d:"15 min at 230 °C, then 50 min at 200 °C. Internal 98 °C.",m:65,cam:"Baked loaf"},
+ ryerest:{t:"Rest 24 hours",d:"Wrap in linen. Rye crumb sets overnight; cutting early makes it gummy.",m:1440,cam:"Crumb shot"},
+ tray:{t:"Into the oiled tray",d:"Pour oil in a tray, tip the dough in, flip to coat.",m:10},
+ fproof:{t:"Proof in the tray",d:"Covered, until puffy and jiggly and filling the corners.",m:180,cam:"Proofed tray"},
+ dimple:{t:"Dimple and top",d:"Oil fingers, press deep dimples. Flaky salt and rosemary. Preheat 230 °C.",m:20},
+ fbake:{t:"Bake",d:"230 °C for 22–28 min until deep gold.",m:25,cam:"Baked focaccia"},
+ shapetin:{t:"Shape into the tin",d:"Roll into a tight log, seam down in a buttered tin.",m:5,cam:"Shaped in tin"},
+ tinproof:{t:"Proof in the tin",d:"Until the dome is 1–2 cm above the rim.",m:240},
+ sbake:{t:"Bake",d:"200 °C for 40 min. Brush with butter as it comes out.",m:40,cam:"Baked loaf"}
+};
+const STARTER_STAGES=[
+ ["new","New","Mix 50 g whole wheat or rye with 50 g water in a clean jar. Mark the level with a band. Leave 24 h."],
+ ["d1","Day 1 feed","Discard all but 50 g. Feed 50 g flour and 50 g water. Little or no activity is normal."],
+ ["d2","Day 2 feed","Discard to 50 g, feed 1:1:1. You may see a burst of bubbles, then a quiet spell. Keep going."],
+ ["d3","Day 3 feed","Feed every 12 h now. Look for a predictable rise and a yoghurty, tangy smell."],
+ ["ready","Ready to mix","Doubles within 4–6 h of a feed, three feeds in a row. Build your levain and start mixing."]
+];
+const RISES=[["none","No rise"],["q","Up about 25%"],["h","Up about 50%"],["x2","Doubled"],["x3","More than doubled"]];
+const WOODS=["Birch","Cherry","Sycamore","Walnut","Olive","Beech","Lime (basswood)","Alder","Other"];
+const SPOON_STAGES=["Blank","Axe work","Knife roughing","Bowl hollowing","Finishing cuts","Drying","Oiled"];
+
+/* ---------- state ---------- */
+const S={starter:{stage:"new",feeds:[]},bakes:[],spoons:[],tools:[]};
+const UI={tab:"bake",recipe:"country",loaves:2,loafWeight:900,hyd:75,lev:20,salt:2,spoon:null,photoTarget:null,armed:{},confirm:null,showForm:false};
+const LS="slowcraftsman.v1",LSUI="slowcraftsman.ui";
+let db=null,assets=null,mode="local",dirty=false;
+try{const j=JSON.parse(localStorage.getItem(LS)||"null");if(j)Object.assign(S,j)}catch(e){}
+try{const u=JSON.parse(localStorage.getItem(LSUI)||"null");if(u){UI.tab=u.tab||UI.tab}}catch(e){}
+
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const R=id=>RECIPES.find(r=>r.id===id)||RECIPES[0];
+const hm=t=>new Date(t).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+const dayLabel=t=>{const d=new Date(t),n=new Date();const dd=Math.round((new Date(d.toDateString())-new Date(n.toDateString()))/864e5);return dd===0?"Today":dd===1?"Tomorrow":dd===-1?"Yesterday":d.toLocaleDateString([], {weekday:"short",day:"numeric",month:"short"})};
+const dur=ms=>{const neg=ms<0;ms=Math.abs(ms);const h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3);return (neg?"-":"")+(h?h+"h "+String(m).padStart(2,"0")+"m":m+"m "+String(s).padStart(2,"0")+"s")};
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
+
+/* ---------- persistence ---------- */
+function saveLocal(){if(mode!=="local")return;try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){toast("This device is out of space for photos")}}
+async function put(col,obj){
+  if(col==="starter"){S.starter=obj}else{const a=S[col],i=a.findIndex(x=>x.id===obj.id);if(i>=0)a[i]=obj;else a.unshift(obj)}
+  render();saveLocal();
+  if(db){try{const {id,...data}=obj;await db.doc(col==="starter"?"starter/main":col+"/"+obj.id).set(data)}catch(e){toast("Couldn't save: "+(e.message||e.code||"try again"))}}
+}
+async function del(col,id){S[col]=S[col].filter(x=>x.id!==id);render();saveLocal();if(db){try{await db.doc(col+"/"+id).delete()}catch(e){toast("Couldn't remove it")}}}
+
+/* ---------- photos ---------- */
+function resize(file,max,q){return new Promise((res,rej)=>{const img=new Image();const u=URL.createObjectURL(file);img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(b=>b?res({blob:b,dataUrl:()=>c.toDataURL("image/jpeg",q)}):rej(),"image/jpeg",q)};img.onerror=rej;img.src=u})}
+async function storePhoto(file){
+  if(assets){try{const r=await resize(file,1600,.82);const up=await assets.upload(r.blob);return {url:up.url,asset:up.id}}catch(e){toast("Upload failed, keeping a small copy")}}
+  const r=await resize(file,560,.66);return {url:r.dataUrl()};
+}
+function askPhoto(target){UI.photoTarget=target;const i=$("#photoIn");i.value="";i.click()}
+$("#photoIn").addEventListener("change",async e=>{const f=e.target.files[0];const tg=UI.photoTarget;if(!f||!tg)return;toast("Saving photo…");try{const p=await storePhoto(f);p.at=Date.now();await tg(p)}catch(err){toast("That photo couldn't be read")}});
+
+/* ---------- formula maths ---------- */
+function formula(o){
+  const r=R(o.recipe),h=o.hyd/100,s=o.salt/100,L=o.lev/100,ex=r.extras.reduce((a,x)=>a+x[1],0)/100;
+  const total=o.loaves*o.loafWeight,F=total/(1+h+s+ex),lev=F*L;
+  const rows=[];r.flours.forEach(([n,p])=>rows.push([n,p,F*p/100-(lev/2)*p/100,"flour"]));
+  rows.push(["Water",o.hyd,F*h-lev/2,"water"]);rows.push(["Levain (100% hydration)",o.lev,lev,"lev"]);rows.push(["Salt",o.salt,F*s,"salt"]);
+  r.extras.forEach(([n,p])=>rows.push([n,p,F*p/100,"ex"]));
+  const build=lev*1.1;return {rows,total,F,lev,seed:build/5,bflour:build*2/5,bwater:build*2/5};
+}
+const g=n=>Math.round(n).toLocaleString();
+
+/* ---------- bake timeline ---------- */
+function schedule(b){
+  // planned start of each step: previous step's completion (or planned completion) + its wait
+  const out=[];let prevEnd=b.startedAt;
+  b.steps.forEach((st,i)=>{const def=STEPS[st.key];const start=i===0?b.startedAt:prevEnd;const end=(st.doneAt||Math.max(start,i===firstOpen(b)?Date.now():start));prevEnd=(st.doneAt||start)+def.m*6e4;out.push({...st,def,start})});
+  return out;
+}
+const firstOpen=b=>b.steps.findIndex(s=>!s.doneAt);
+const active=()=>S.bakes.find(b=>b.status==="active");
+
+/* ---------- alarm ---------- */
+let ac=null;document.addEventListener("pointerdown",()=>{if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}},{once:true});
+function chime(){try{if(!ac)return;[0,.35,.7].forEach((d,i)=>{const o=ac.createOscillator(),v=ac.createGain();o.frequency.value=[660,880,990][i];o.connect(v);v.connect(ac.destination);v.gain.setValueAtTime(.0001,ac.currentTime+d);v.gain.exponentialRampToValueAtTime(.25,ac.currentTime+d+.02);v.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d+.6);o.start(ac.currentTime+d);o.stop(ac.currentTime+d+.65)})}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}
+
+/* ---------- icons ---------- */
+const I={
+ bake:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 14c0-4.4 3.6-8 8-8s8 3.6 8 8v3H4z"/><path d="M9 9.5l1.5 2M13 8.5l1.2 2.2M16 10l.8 1.6"/></svg>',
+ starter:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M7 3h10M8 3v3l-2 3v10a2 2 0 002 2h8a2 2 0 002-2V9l-2-3V3"/><path d="M6 13h12"/><circle cx="10" cy="16.5" r=".8"/><circle cx="14" cy="17.5" r=".8"/></svg>',
+ formula:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 19h18M6 19l3-11h6l3 11"/><path d="M12 8V4M9 4h6"/></svg>',
+ spoons:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><ellipse cx="16" cy="7" rx="3.6" ry="4.6" transform="rotate(40 16 7)"/><path d="M13.3 10.2L4 20"/></svg>',
+ tools:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 20l8-8"/><path d="M12 12c2-1 3.5-3.5 3-6l5 1c-.5 3.5-3.5 6.5-8 5z"/></svg>',
+ cam:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>'
+};
+function nav(){
+  const it=[["bake","Bake",""],["starter","Starter",""],["formula","Formula",""],["sep"],["spoons","Spoons","sp"],["tools","Tools","sp"]];
+  $("#nav").innerHTML=it.map(([k,l,c])=>k==="sep"?'<div class="sep"></div>':`<button data-tab="${k}" class="${c}" ${UI.tab===k||(k==="spoons"&&UI.tab==="spoon")?'aria-current="page"':""}>${I[k]}${l}</button>`).join("");
+}
+
+/* ---------- views ---------- */
+function vFormula(){
+  const r=R(UI.recipe),f=formula(UI);const a=active();
+  return `<section class="stack">
+  <div class="panel"><h3>Bread type</h3><div class="chips">${RECIPES.map(x=>`<button class="chip" data-recipe="${x.id}" aria-pressed="${x.id===UI.recipe}">${esc(x.name)}</button>`).join("")}</div>
+   <p class="muted small">${esc(r.blurb)}</p></div>
+  <div class="panel">
+   <div class="row between"><h3>Batch</h3><span class="small muted num">${g(f.total)} g dough</span></div>
+   <div class="row between"><span>Loaves</span><div class="stepper"><button data-loaf="-1" aria-label="Fewer loaves">−</button><output>${UI.loaves}</output><button data-loaf="1" aria-label="More loaves">+</button></div></div>
+   <label class="f">Dough per loaf (g)<input id="lw" type="number" inputmode="numeric" min="200" step="50" value="${UI.loafWeight}"></label>
+  </div>
+  <div class="panel"><h3>Ratios</h3>
+   ${slider("hyd","Hydration",UI.hyd,r.hmin,r.hmax,1,"Recipe "+r.hyd+"%")}
+   ${slider("lev","Levain",UI.lev,5,40,1,"Recipe "+r.lev+"%")}
+   ${slider("salt","Salt",UI.salt,1.5,3,.1,"Recipe "+r.salt+"%")}
+   <button class="link" data-reset>Reset to recipe ratios</button>
+  </div>
+  <div class="panel" style="overflow-x:auto"><h3>Formula</h3>
+   <table><thead><tr><th>Ingredient</th><th class="r">Baker's %</th><th class="r">Grams</th></tr></thead><tbody>
+   ${f.rows.map(x=>`<tr><td>${esc(x[0])}</td><td class="r num">${(+x[1]).toFixed(x[1]%1?1:0)}%</td><td class="r num">${g(x[2])}</td></tr>`).join("")}
+   <tr class="total"><td>Total dough</td><td></td><td class="r num">${g(f.total)}</td></tr></tbody></table>
+   <p class="small muted">Flour and water already account for what's inside the levain. Total flour ${g(f.F)} g.</p>
+   <div class="note small"><b>Levain build (1:2:2, +10%)</b><br><span class="num">${g(f.seed)} g starter · ${g(f.bflour)} g flour · ${g(f.bwater)} g water</span></div>
+  </div>
+  ${a?`<p class="small muted">A bake is already in progress. Finish it before starting another.</p>`:`<button class="primary" data-start>Start this bake</button>`}
+  </section>`;
+}
+function slider(k,l,v,min,max,st,hint){return `<div class="slider"><div class="row"><label for="s-${k}"><b>${l}</b> <span class="small muted">${hint}</span></label><span class="num">${(+v).toFixed(st<1?1:0)}%</span></div><input id="s-${k}" type="range" min="${min}" max="${max}" step="${st}" value="${v}" data-sl="${k}"></div>`}
+
+function vBake(){
+  const a=active();const past=S.bakes.filter(b=>b.status!=="active");
+  let h="";
+  if(!a){
+    h+=`<div class="empty"><h2 style="color:var(--ink)">No bake on the go</h2><p class="small">Pick a bread and set your batch in Formula, then start. Each step gets a timer and asks for a photo at the stages that matter.</p><button class="primary" data-tab="formula">Plan a bake</button></div>`;
+  }else{
+    const sc=schedule(a),fo=firstOpen(a),r=R(a.recipe),f=formula(a);
+    const st=S.starter.stage;
+    h+=`<section class="panel">
+      <div class="row between"><h2>${esc(r.name)}</h2><span class="pill p-warn">In progress</span></div>
+      <p class="small muted num">${a.loaves} × ${g(a.loafWeight)} g · ${a.hyd}% hydration · ${a.lev}% levain · ${a.salt}% salt</p>
+      ${st!=="ready"?`<p class="note small">Your starter is logged at <b>${esc(STARTER_STAGES.find(x=>x[0]===st)[1])}</b>. It may not be strong enough to raise this dough yet.</p>`:""}
+      <details><summary>Ingredient weights</summary><table style="margin-top:8px"><tbody>${f.rows.map(x=>`<tr><td>${esc(x[0])}</td><td class="r num">${g(x[2])} g</td></tr>`).join("")}</tbody></table></details>
+      <ol class="tl">${sc.map((s,i)=>stepRow(a,s,i,fo)).join("")}</ol>
+      ${fo<0?`<label class="f">How did it turn out?<textarea id="bnote" rows="2" placeholder="Crumb, crust, what to change next time">${esc(a.note||"")}</textarea></label><button class="sap" data-finish>Finish bake</button>`:""}
+      <div class="row between"><button class="ghost" data-copy>Copy schedule</button><button class="link" data-abandon>${UI.confirm==="abandon"?"Tap again to cancel bake":"Cancel bake"}</button></div>
+    </section>`;
+  }
+  if(past.length){h+=`<section class="stack"><h3>Bake log</h3><div class="list">${past.map(b=>{const ph=b.steps.filter(s=>s.photo).map(s=>s.photo);const r=R(b.recipe);return `<details class="panel"><summary class="row between" style="list-style:none"><span><b style="color:var(--ink)">${esc(r.name)}</b><br><span class="small num">${new Date(b.startedAt).toLocaleDateString([], {day:"numeric",month:"short",year:"numeric"})} · ${b.loaves} × ${g(b.loafWeight)} g · ${b.hyd}%</span></span>${ph[0]?`<img class="mini" src="${esc(ph[ph.length-1].url)}" alt="">`:""}</summary>
+      ${b.note?`<p class="small">${esc(b.note)}</p>`:""}<div class="thumbs">${b.steps.filter(s=>s.photo).map(s=>`<figure><img src="${esc(s.photo.url)}" alt="${esc(STEPS[s.key].cam||"")}" loading="lazy"><figcaption>${esc(STEPS[s.key].cam||STEPS[s.key].t)}</figcaption></figure>`).join("")}</div>
+      <button class="ghost" data-again="${b.id}">Bake this again</button></details>`}).join("")}</div></section>`}
+  return h;
+}
+function stepRow(a,s,i,fo){
+  const d=s.def,done=!!s.doneAt,now=i===fo;
+  const time=done?hm(s.doneAt):hm(s.start);const day=dayLabel(done?s.doneAt:s.start);
+  let body=`<span class="ttl">${esc(d.t)}</span>`;
+  if(d.cam)body+=`<span class="cam">Photo checkpoint · ${esc(d.cam)}</span>`;
+  if(done){if(s.photo)body+=`<img class="mini" src="${esc(s.photo.url)}" alt="${esc(d.cam)}">`;}
+  else if(now){
+    const wait=s.start-Date.now();
+    body+=`<div class="nowbox"><p class="small">${esc(d.d)}</p>
+      ${wait>0?`<div><span class="small muted">Starts ${esc(dayLabel(s.start))} at ${hm(s.start)}</span><div class="count" data-until="${s.start}">${dur(wait)}</div></div>`:`<div class="count" style="color:var(--crust)">Do this now</div>`}
+      ${s.photo?`<img class="mini" src="${esc(s.photo.url)}" alt="">`:""}
+      <div class="row">${d.cam&&!s.photo?`<button class="primary" data-stepphoto="${i}">${I.cam} Add photo</button><button class="link" data-stepdone="${i}">Complete without photo</button>`:`<button class="primary" data-stepdone="${i}">Mark done</button>${d.cam?`<button class="link" data-stepphoto="${i}">Retake</button>`:""}`}</div>
+      ${d.m>=20&&i<a.steps.length-1?`<p class="small muted">Next step ${d.m>=60?"in "+Math.round(d.m/60*10)/10+" h":"in "+d.m+" min"} after you mark this done.</p>`:""}</div>`;
+  }else body+=`<span class="small muted">${esc(d.d)}</span>`;
+  return `<li class="${done?"done":now?"now":""}"><div class="t">${time}<br><span style="font-size:11px">${esc(day==="Today"?"":day)}</span></div><div class="dot"><i></i></div><div class="body">${body}</div></li>`;
+}
+
+function vStarter(){
+  const s=S.starter,idx=STARTER_STAGES.findIndex(x=>x[0]===s.stage),cur=STARTER_STAGES[idx];
+  const last=s.feeds[0];const interval=idx>=3?12:24;const due=last?last.at+interval*36e5:null;
+  const act=last?({none:["Dormant","p-mute"],q:["Waking up","p-warn"],h:["Rising","p-warn"],x2:["Active","p-ok"],x3:["Very active","p-ok"]}[last.rise]||["Unknown","p-mute"]):["No feeds yet","p-mute"];
+  return `<section class="stack">
+   <div class="panel"><div class="row between"><h2>Starter</h2><span class="pill ${act[1]}">${act[0]}</span></div>
+    <div class="stages" role="group" aria-label="Starter stage">${STARTER_STAGES.map((x,i)=>`<button data-sstage="${x[0]}" class="${i<idx?"past":""}" aria-pressed="${i===idx}">${esc(x[1])}</button>`).join("")}</div>
+    <p>${esc(cur[2])}</p>
+    ${due?`<p class="small muted">Next feed ${esc(dayLabel(due))} at ${hm(due)} · <span class="num" data-until="${due}">${dur(due-Date.now())}</span></p>`:""}
+    ${idx<4?`<button class="ghost" data-snext>Move to ${esc(STARTER_STAGES[idx+1][1])}</button>`:`<button class="primary" data-tab="formula">Plan a bake</button>`}
+   </div>
+   <div class="panel"><h3>Log a feed</h3>
+    <div class="grid2"><label class="f">Ratio (starter:flour:water)<select id="fratio"><option>1:1:1</option><option>1:2:2</option><option>1:3:3</option><option>1:5:5</option></select></label>
+    <label class="f">Rise since last feed<select id="frise">${RISES.map(r=>`<option value="${r[0]}">${r[1]}</option>`).join("")}</select></label></div>
+    <label class="f">Notes<input id="fnote" placeholder="Smell, flour used, room temperature"></label>
+    <div class="row"><button class="primary" data-feedphoto>${I.cam} Feed with photo</button><button class="ghost" data-feed>Feed without photo</button></div>
+   </div>
+   ${s.feeds.length?`<div class="panel"><h3>Feed history</h3><div class="list">${s.feeds.map(f=>`<div class="row" style="flex-wrap:nowrap;align-items:flex-start">${f.photo?`<img class="mini" src="${esc(f.photo.url)}" alt="Starter jar">`:`<div class="ph">${I.cam}</div>`}<div style="min-width:0"><b>${esc(dayLabel(f.at))} ${hm(f.at)}</b> <span class="small muted">${esc(STARTER_STAGES.find(x=>x[0]===f.stage)?.[1]||"")}</span><br><span class="small num">${esc(f.ratio)} · ${esc((RISES.find(r=>r[0]===f.rise)||[,""])[1])}</span>${f.note?`<br><span class="small muted">${esc(f.note)}</span>`:""}</div></div>`).join("")}</div></div>`:""}
+  </section>`;
+}
+
+function vSpoons(){
+  return `<section class="stack"><div class="row between"><h2>Spoons</h2><button class="sap" data-newspoon>New spoon</button></div>
+  ${UI.showForm?`<div class="panel"><label class="f">Name<input id="nsname" placeholder="e.g. Cherry eating spoon"></label><label class="f">Wood<select id="nswood">${WOODS.map(w=>`<option>${w}</option>`).join("")}</select></label><div class="row"><button class="sap" data-createspoon>Create</button><button class="link" data-newspoon>Cancel</button></div></div>`:""}
+  ${S.spoons.length?`<div class="list">${S.spoons.map(s=>{const ph=s.photos?.[0];return `<button class="card" data-openspoon="${s.id}">${ph?`<img class="mini" src="${esc(ph.url)}" alt="">`:`<div class="ph">${I.spoons}</div>`}<span class="grow"><b>${esc(s.name)}</b><span class="small muted">${esc(s.wood)} · ${esc(s.stage)}</span><span class="small num muted">${s.dims?.l?`${s.dims.l} × ${s.dims.w||"–"} × ${s.dims.h||"–"} mm`:"No dimensions yet"}</span></span><span class="pill ${s.stage==="Oiled"?"p-ok":"p-mute"}">${(s.photos||[]).length} photos</span></button>`}).join("")}</div>`
+  :`<div class="empty"><p>No carvings yet. Start one to keep progress photos, dimensions and links to its OneDrive folder and Revit model in one place.</p></div>`}</section>`;
+}
+function vSpoon(){
+  const s=S.spoons.find(x=>x.id===UI.spoon);if(!s){UI.tab="spoons";return vSpoons()}
+  const d=s.dims||{},si=SPOON_STAGES.indexOf(s.stage),has=d.l&&d.w&&d.h;
+  return `<section class="stack"><button class="link" data-tab="spoons" style="align-self:flex-start">← All spoons</button>
+  <div class="panel"><div class="row between"><h2>${esc(s.name)}</h2><span class="pill p-mute">${esc(s.wood)}</span></div>
+   <div class="stages" role="group" aria-label="Carving stage">${SPOON_STAGES.map((x,i)=>`<button data-spstage="${esc(x)}" class="${i<si?"past":""}" aria-pressed="${i===si}">${esc(x)}</button>`).join("")}</div></div>
+  <div class="panel"><div class="row between"><h3>Progress photos</h3><button class="sap" data-spphoto>${I.cam} Add photo</button></div>
+   <input id="spnote" placeholder="Note for the next photo (optional)">
+   ${(s.photos||[]).length?`<div class="thumbs">${s.photos.map(p=>`<figure><img src="${esc(p.url)}" alt="${esc(p.stage)}" loading="lazy"><figcaption>${esc(p.stage)} · ${new Date(p.at).toLocaleDateString([], {day:"numeric",month:"short"})}${p.note?"<br>"+esc(p.note):""}</figcaption></figure>`).join("")}</div>`:`<p class="small muted">Photos are tagged with the current stage, so the gallery reads as a carving log.</p>`}</div>
+  <div class="panel"><h3>Overall dimensions (mm)</h3>
+   <div class="grid3"><label class="f">Length<input type="number" inputmode="numeric" id="dl" value="${esc(d.l||"")}" data-dim="l"></label><label class="f">Width<input type="number" inputmode="numeric" id="dw" value="${esc(d.w||"")}" data-dim="w"></label><label class="f">Depth<input type="number" inputmode="numeric" id="dh" value="${esc(d.h||"")}" data-dim="h"></label></div>
+   ${has?`<p class="small muted num">Bounding box ${d.l} × ${d.w} × ${d.h} mm · blank ≈ ${g(d.l*d.w*d.h/1000)} cm³</p>`:`<p class="small muted">Length is tip to handle end, width across the bowl, depth from the bowl's lip to the crank.</p>`}</div>
+  <div class="panel"><h3>Revit model</h3>
+   <div class="row between"><span>${has?(s.revit?"Model linked":"Ready to model from these dimensions"):"Waiting for overall dimensions"}</span><span class="pill ${s.revit?"p-ok":has?"p-warn":"p-mute"}">${s.revit?"Linked":has?"Ready":"Pending"}</span></div>
+   <label class="f">Model link (OneDrive, ACC or viewer URL)<input id="rv" type="url" value="${esc(s.revit||"")}" placeholder="https://" data-field="revit"></label>
+   ${s.revit?`<a class="btn ghost" href="${esc(s.revit)}" target="_blank" rel="noopener">Open model</a>`:""}</div>
+  <div class="panel"><h3>OneDrive photo folder</h3>
+   <label class="f">Folder share link<input id="od" type="url" value="${esc(s.onedrive||"")}" placeholder="https://1drv.ms/f/…" data-field="onedrive"></label>
+   ${s.onedrive?`<a class="btn ghost" href="${esc(s.onedrive)}" target="_blank" rel="noopener">Open folder</a>`:""}</div>
+  <button class="link" data-delspoon style="align-self:flex-start">${UI.confirm==="spoon"?"Tap again to delete this spoon":"Delete spoon"}</button></section>`;
+}
+function vTools(){
+  const now=Date.now();
+  const rows=S.tools.map(t=>{const due=(t.last||0)+t.interval*864e5,left=Math.ceil((due-now)/864e5);const st=!t.last?["Not logged","p-mute"]:left<0?["Overdue "+(-left)+" d","p-bad"]:left<=1?["Due "+(left===0?"today":"tomorrow"),"p-warn"]:["In "+left+" days","p-ok"];return {t,st,left:t.last?left:-999}}).sort((a,b)=>a.left-b.left);
+  return `<section class="stack"><h2>Tools &amp; maintenance</h2>
+  <div class="panel">${rows.length?rows.map(({t,st})=>`<div class="tool"><div style="min-width:0"><b>${esc(t.name)}</b><br><span class="small muted">${esc(t.task)} · every ${t.interval} d${t.last?" · last "+new Date(t.last).toLocaleDateString([], {day:"numeric",month:"short"}):""}</span></div><span class="pill ${st[1]}">${st[0]}</span>
+   <div class="row" style="grid-column:1/-1"><button class="ghost" data-tooldone="${t.id}">Done today</button><button class="link" data-tooldel="${t.id}">${UI.confirm==="tool"+t.id?"Tap again to remove":"Remove"}</button></div></div>`).join(""):`<div class="empty" style="border:none"><p>No tools logged yet. Add your knives, axe and sharpening kit below.</p></div>`}</div>
+  <div class="panel"><h3>Add a tool</h3><label class="f">Tool<input id="tn" placeholder="e.g. Hook knife"></label><label class="f">Maintenance task<input id="tt" placeholder="e.g. Strop inside bevel"></label><label class="f">Every (days)<input id="ti" type="number" inputmode="numeric" value="7" min="1"></label><button class="sap" data-addtool>Add tool</button></div></section>`;
+}
+
+function render(){
+  if(document.activeElement&&document.activeElement.matches("#app input,#app textarea,#app select")&&document.activeElement.type!=="range"){dirty=true;return}
+  dirty=false;nav();
+  const v={bake:vBake,starter:vStarter,formula:vFormula,spoons:vSpoons,spoon:vSpoon,tools:vTools}[UI.tab]||vBake;
+  $("#app").innerHTML=v();
+  try{localStorage.setItem(LSUI,JSON.stringify({tab:UI.tab==="spoon"?"spoons":UI.tab}))}catch(e){}
+}
+document.addEventListener("focusout",()=>setTimeout(()=>{if(dirty)render()},0));
+
+/* ---------- actions ---------- */
+function setRecipe(id){const r=R(id);Object.assign(UI,{recipe:id,hyd:r.hyd,lev:r.lev,salt:r.salt,loafWeight:r.loaf})}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("button,[data-tab]");if(!b)return;const ds=b.dataset;
+  if(!("abandon" in ds||"delspoon" in ds||"tooldel" in ds))UI.confirm=null;
+  if(ds.tab){UI.tab=ds.tab;UI.showForm=false;render();scrollTo(0,0);return}
+  if(ds.recipe){setRecipe(ds.recipe);render();return}
+  if(ds.loaf){UI.loaves=Math.max(1,Math.min(12,UI.loaves+ +ds.loaf));render();return}
+  if("reset" in ds){setRecipe(UI.recipe);render();return}
+  if("start" in ds){const r=R(UI.recipe);await put("bakes",{id:uid(),recipe:r.id,loaves:UI.loaves,loafWeight:UI.loafWeight,hyd:UI.hyd,lev:UI.lev,salt:UI.salt,startedAt:Date.now(),status:"active",steps:r.steps.map(k=>({key:k,doneAt:null,photo:null}))});UI.tab="bake";render();scrollTo(0,0);toast("Bake started. First up: build the levain.");return}
+  const a=active();
+  if(ds.stepphoto!=null){const i=+ds.stepphoto;askPhoto(async p=>{const x=active();if(!x)return;x.steps[i].photo=p;await put("bakes",x);toast("Photo saved")});return}
+  if(ds.stepdone!=null&&a){a.steps[+ds.stepdone].doneAt=Date.now();await put("bakes",a);return}
+  if("finish" in ds&&a){a.note=($("#bnote")||{}).value||"";a.status="done";a.finishedAt=Date.now();await put("bakes",a);toast("Logged in your bake history");return}
+  if("abandon" in ds&&a){if(UI.confirm!=="abandon"){UI.confirm="abandon";render();return}UI.confirm=null;await del("bakes",a.id);return}
+  if("copy" in ds&&a){const sc=schedule(a);const txt=R(a.recipe).name+" — "+a.loaves+" × "+a.loafWeight+" g\n"+sc.map(s=>`${s.doneAt?"✓":" "} ${dayLabel(s.doneAt||s.start)} ${hm(s.doneAt||s.start)}  ${s.def.t}${s.def.cam?" [photo]":""}`).join("\n");try{await navigator.clipboard.writeText(txt);toast("Schedule copied")}catch(err){toast("Copy isn't allowed here")}return}
+  if(ds.again){const old=S.bakes.find(x=>x.id===ds.again);if(old){Object.assign(UI,{recipe:old.recipe,loaves:old.loaves,loafWeight:old.loafWeight,hyd:old.hyd,lev:old.lev,salt:old.salt,tab:"formula"});render();scrollTo(0,0)}return}
+  // starter
+  if(ds.sstage){await put("starter",{...S.starter,stage:ds.sstage});return}
+  if("snext" in ds){const i=STARTER_STAGES.findIndex(x=>x[0]===S.starter.stage);await put("starter",{...S.starter,stage:STARTER_STAGES[Math.min(4,i+1)][0]});return}
+  if("feed" in ds||"feedphoto" in ds){const f={at:Date.now(),stage:S.starter.stage,ratio:$("#fratio").value,rise:$("#frise").value,note:$("#fnote").value.trim(),photo:null};
+    const save=async p=>{f.photo=p||null;await put("starter",{...S.starter,feeds:[f,...S.starter.feeds].slice(0,60)});toast("Feed logged")};
+    if("feedphoto" in ds)askPhoto(save);else save();return}
+  // spoons
+  if("newspoon" in ds){UI.showForm=!UI.showForm;render();if(UI.showForm)$("#nsname")?.focus();return}
+  if("createspoon" in ds){const n=$("#nsname").value.trim();if(!n){toast("Give the spoon a name first");return}const s={id:uid(),name:n,wood:$("#nswood").value,stage:"Blank",dims:{},photos:[],onedrive:"",revit:"",createdAt:Date.now()};UI.showForm=false;await put("spoons",s);UI.tab="spoon";UI.spoon=s.id;render();return}
+  if(ds.openspoon){UI.tab="spoon";UI.spoon=ds.openspoon;render();scrollTo(0,0);return}
+  const sp=S.spoons.find(x=>x.id===UI.spoon);
+  if(ds.spstage&&sp){sp.stage=ds.spstage;await put("spoons",sp);return}
+  if("spphoto" in ds&&sp){const note=$("#spnote").value.trim();askPhoto(async p=>{const s=S.spoons.find(x=>x.id===UI.spoon);if(!s)return;p.stage=s.stage;p.note=note;s.photos=[p,...(s.photos||[])];await put("spoons",s);toast("Progress photo saved")});return}
+  if("delspoon" in ds&&sp){if(UI.confirm!=="spoon"){UI.confirm="spoon";render();return}UI.confirm=null;UI.tab="spoons";await del("spoons",sp.id);return}
+  // tools
+  if(ds.tooldone){const t=S.tools.find(x=>x.id===ds.tooldone);if(t){t.last=Date.now();await put("tools",t);toast(t.name+" logged")}return}
+  if(ds.tooldel){if(UI.confirm!=="tool"+ds.tooldel){UI.confirm="tool"+ds.tooldel;render();return}UI.confirm=null;await del("tools",ds.tooldel);return}
+  if("addtool" in ds){const n=$("#tn").value.trim();if(!n){toast("Name the tool first");return}await put("tools",{id:uid(),name:n,task:$("#tt").value.trim()||"Maintain",interval:Math.max(1,+$("#ti").value||7),last:null});return}
+});
+document.addEventListener("input",e=>{const t=e.target;
+  if(t.dataset.sl){UI[t.dataset.sl]=+t.value;const out=t.parentElement.querySelector(".num");if(out)out.textContent=(+t.value).toFixed(t.step<1?1:0)+"%";return}});
+document.addEventListener("change",async e=>{const t=e.target;
+  if(t.dataset.sl){render();return}
+  if(t.id==="lw"){UI.loafWeight=Math.max(200,+t.value||900);t.blur();render();return}
+  const sp=S.spoons.find(x=>x.id===UI.spoon);
+  if(t.dataset.dim&&sp){sp.dims={...(sp.dims||{}),[t.dataset.dim]:+t.value||null};t.blur();await put("spoons",sp);return}
+  if(t.dataset.field&&sp){let v=t.value.trim();if(v&&!/^https?:\/\//i.test(v))v="https://"+v;sp[t.dataset.field]=v;t.blur();await put("spoons",sp);return}
+});
+
+/* ---------- ticking timers ---------- */
+let lastOpen=null;
+setInterval(()=>{document.querySelectorAll("[data-until]").forEach(el=>{const ms=+el.dataset.until-Date.now();el.textContent=ms>0?dur(ms):"Now"});
+  const a=active();if(!a)return;const sc=schedule(a),fo=firstOpen(a);if(fo<0)return;const key=a.id+":"+fo,due=sc[fo].start<=Date.now();
+  if(due&&!UI.armed[key]){UI.armed[key]=1;if(lastOpen===key){chime();toast("Time for: "+sc[fo].def.t);if(UI.tab==="bake")render()}}
+  if(!due)UI.armed[key]=0;lastOpen=key},1000);
+
+/* ---------- boot ---------- */
+render();
+(async()=>{
+  if(!window.claude||!window.claude.use)return;
+  try{[db,assets]=await Promise.all([claude.use("db"),claude.use("assets")])}catch(e){}
+  if(!db){$("#sync").textContent="Saved on this device";return}
+  mode="db";$("#sync").textContent="Synced";
+  const map=s=>s.docs.map(d=>({id:d.id,...d.data()}));
+  db.collection("bakes").onSnapshot(s=>{S.bakes=map(s).sort((a,b)=>b.startedAt-a.startedAt);render()},()=>{$("#sync").textContent="Sync paused"});
+  db.collection("spoons").onSnapshot(s=>{S.spoons=map(s).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));render()});
+  db.collection("tools").onSnapshot(s=>{S.tools=map(s);render()});
+  db.doc("starter/main").onSnapshot(d=>{if(d.exists){const x=d.data();S.starter={stage:x.stage||"new",feeds:x.feeds||[]}}else S.starter={stage:"new",feeds:[]};render()});
+})();
+})();
+</script>
